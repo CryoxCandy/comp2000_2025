@@ -1,5 +1,6 @@
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.Optional;
 
 public class Grid {
   Cell[][] cells = new Cell[20][20];
@@ -20,7 +21,25 @@ public class Grid {
     }
   }
 
-  public Cell cellAtColRow(int c, int r) {
-    return cells[c][r];
+  public Optional<Cell> cellAtColRow(int c, int r) {
+    if (c >= 0 && c < cells.length && r >= 0 && r < cells[0].length) {
+      return Optional.of(cells[c][r]);
+    }
+    return Optional.empty();
+  }
+
+  public Optional<Cell> cellAtPoint(Point p) {
+    if (p == null) {
+      return Optional.empty();
+    }
+
+    int col = (p.x - 10) / Cell.size;
+    int row = (p.y - 10) / Cell.size;
+
+    if (col >= 0 && col < cells.length && row >= 0 && row < cells[0].length) {
+      return Optional.of(cells[col][row]);
+    }
+
+    return Optional.empty();
   }
 }

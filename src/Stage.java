@@ -10,15 +10,21 @@ public class Stage {
   public Stage() {
     grid = new Grid();
     actors = new ArrayList<>();
-    actors.add(new Cat(grid.cellAtColRow(0, 0)));
-    actors.add(new Dog(grid.cellAtColRow(0, 15)));
-    actors.add(new Bird(grid.cellAtColRow(12, 9)));
+    grid.cellAtColRow(0, 0).ifPresent(cell -> actors.add(new Cat(cell)));
+    grid.cellAtColRow(0, 15).ifPresent(cell -> actors.add(new Dog(cell)));
+    grid.cellAtColRow(12, 9).ifPresent(cell -> actors.add(new Bird(cell)));
   }
 
   public void paint(Graphics g, Point mouseLoc) {
     grid.paint(g, mouseLoc);
     for (Actor actor : actors) {
       actor.paint(g);
+    }
+
+    if (mouseLoc != null) {
+      grid.cellAtPoint(mouseLoc).ifPresent(cell -> {
+        g.drawString("Cell Info: " + cell.toString(), 740, 20);
+      });
     }
   }
 }
