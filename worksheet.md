@@ -81,7 +81,7 @@ We have provided a possible sensible path via Tasks 10, 11, and 12 if your team 
 Did you notice the repetition in the stage paint method?  All three actors have the `paint` method called on them.  In fact, we might later want to have dozens of actors on the stage at any one time, we don't want dozens of calls to `someone.paint(g);`.  What we need is a collection to store all the actors, something like an array that we can put them all in.  Then we can just loop over that array and call  `paint` on every element.  _I think_ we should use an `ArrayList` (https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ArrayList.html).  Notice it is a generic collection?  You will need to use generics to make this work.  Put all the actors in a single array list called `actors` and then loop over this list to paint them.  Once you have done that you might like to add more actors to the stage.
 
 🤔 In my solution, I will declare the actors list as a `List` instead of an `ArrayList`.  Any idea why?  Why does this even work? 
-This be ye from polymorphism. Le list is rather abstract, a general implementation which ye can change to something specific later. It's like using a box to carry something but not deciding what box ye be needing till you actually see what yer carrying. Argh
+Self note: This be ye from polymorphism. Le list is rather abstract, a general implementation which ye can change to something specific later. It's like using a box to carry something but not deciding what box ye be needing till you actually see what yer carrying. Argh
 
 ### Task 11
 
@@ -159,3 +159,5 @@ public Optional<Cell> cellAtPoint(Point p)
 🤔 How about we improve the `cellAtColRow` method now we know about optional containers?
 
 🤔 Now that we have `cellAtPoint`, lets use it.  Grow the app window to 1024x720 so we have some clear space to the right of the grid.  In this space, put the details of whatever cell we are hoving over.  For example, you might put the type of cell that is located there, and what it's elevation is.  There are many ways to do this, but one good way is to call `cellAtPoint` while painting the stage and use the resulting cell information.
+
+Self note: Read into this more cuz figuring it out on my own was a pain. Bless AI for explaining it but I still don't understand >:C
