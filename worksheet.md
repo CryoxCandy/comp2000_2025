@@ -80,7 +80,8 @@ We have provided a possible sensible path via Tasks 10, 11, and 12 if your team 
 
 Did you notice the repetition in the stage paint method?  All three actors have the `paint` method called on them.  In fact, we might later want to have dozens of actors on the stage at any one time, we don't want dozens of calls to `someone.paint(g);`.  What we need is a collection to store all the actors, something like an array that we can put them all in.  Then we can just loop over that array and call  `paint` on every element.  _I think_ we should use an `ArrayList` (https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/util/ArrayList.html).  Notice it is a generic collection?  You will need to use generics to make this work.  Put all the actors in a single array list called `actors` and then loop over this list to paint them.  Once you have done that you might like to add more actors to the stage.
 
-🤔 In my solution, I will declare the actors list as a `List` instead of an `ArrayList`.  Any idea why?  Why does this even work?
+🤔 In my solution, I will declare the actors list as a `List` instead of an `ArrayList`.  Any idea why?  Why does this even work? 
+This be ye from polymorphism. Le list is rather abstract, a general implementation which ye can change to something specific later. It's like using a box to carry something but not deciding what box ye be needing till you actually see what yer carrying. Argh
 
 ### Task 11
 
