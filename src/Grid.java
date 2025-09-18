@@ -1,5 +1,7 @@
 import java.awt.Graphics;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -78,5 +80,22 @@ public class Grid {
       return Optional.of(((Cell) cell.get()).getInfo());
     }
     return Optional.empty();
+  }
+
+  public List<Cell> getNeighbors(Cell cell) {
+    List<Cell> neighbors = new ArrayList<>();
+    int col = labelToCol(cell.col);
+    int row = cell.row;
+
+    int[] dCol = {-1, 0, 1, 0};
+    int[] dRow = {0, -1, 0, 1};
+
+    for (int i = 0; i < 4; i++) {
+      int newCol = col + dCol[i];
+      int newRow = row + dRow[i];
+      cellAtColRow(newCol, newRow).ifPresent(neighbors::add);
+    }
+
+    return neighbors;
   }
 }

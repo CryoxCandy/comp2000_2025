@@ -12,8 +12,20 @@ public class Main extends JFrame {
 
     class Canvas extends JPanel {
       Stage stage = new Stage();
+
       public Canvas() {
         setPreferredSize(new Dimension(1024, 720));
+        new Thread(() -> {
+          while (true) {
+            try {
+              Thread.sleep(2000); // Move actors every 2 seconds
+              stage.moveActors();
+              repaint();
+            } catch (InterruptedException e) {
+              e.printStackTrace();
+            }
+          }
+        }).start();
       }
 
       @Override

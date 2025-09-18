@@ -32,4 +32,12 @@ public class Stage {
       cellInfo.ifPresent(info -> g.drawString(info, 740, 50));
     }
   }
+
+  public void moveActors() {
+    for (Actor actor : actors) {
+      if (!(actor instanceof Player)) {
+        actor.moveRandomly(grid);
+      }
+    }
+  }
 }
