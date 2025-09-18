@@ -1,14 +1,34 @@
 import java.awt.Graphics;
 import java.awt.Point;
 import java.util.Optional;
+import java.util.Random;
 
 public class Grid {
   Cell[][] cells = new Cell[20][20];
   
+  private Cell createRandomCell(int i, int j) {
+    Random random = new Random();
+    int cellType = random.nextInt(3);
+    char colLabel = colToLabel(i);
+    int x = 10 + Cell.size * i;
+    int y = 10 + Cell.size * j;
+
+    switch (cellType) {
+      case 0:
+        return new GrassCell(colLabel, j, x, y);
+      case 1:
+        return new WaterCell(colLabel, j, x, y);
+      case 2:
+        return new SandCell(colLabel, j, x, y);
+      default:
+        return new GrassCell(colLabel, j, x, y);
+    }
+  }
+
   public Grid() {
-    for(int i=0; i<cells.length; i++) {
-      for(int j=0; j<cells[i].length; j++) {
-        cells[i][j] = new Cell(colToLabel(i), j, 10+Cell.size*i, 10+Cell.size*j);
+    for (int i = 0; i < cells.length; i++) {
+      for (int j = 0; j < cells[i].length; j++) {
+        cells[i][j] = createRandomCell(i, j);
       }
     }
   }
@@ -48,6 +68,14 @@ public class Grid {
           return Optional.of(cells[i][j]);
         }
       }
+    }
+    return Optional.empty();
+  }
+
+  public Optional<String> cellInfoAtPoint(Point p) {
+    Optional<Cell> cell = cellAtPoint(p);
+    if (cell.isPresent()) {
+      return Optional.of(((Cell) cell.get()).getInfo());
     }
     return Optional.empty();
   }

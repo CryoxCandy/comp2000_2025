@@ -19,14 +19,16 @@ public class Stage {
 
   public void paint(Graphics g, Point mouseLoc) {
     grid.paint(g, mouseLoc);
-    for(Actor a: actors) {
+    for (Actor a : actors) {
       a.paint(g);
     }
     Optional<Cell> underMouse = grid.cellAtPoint(mouseLoc);
-    if(underMouse.isPresent()) {
+    if (underMouse.isPresent()) {
       Cell hoverCell = underMouse.get();
       g.setColor(Color.DARK_GRAY);
       g.drawString(String.valueOf(hoverCell.col) + String.valueOf(hoverCell.row), 740, 30);
+      Optional<String> cellInfo = grid.cellInfoAtPoint(mouseLoc);
+      cellInfo.ifPresent(info -> g.drawString(info, 740, 50));
     }
   }
 }

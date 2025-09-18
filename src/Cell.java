@@ -3,7 +3,7 @@ import java.awt.Graphics;
 import java.awt.Point;
 import java.awt.Rectangle;
 
-public class Cell extends Rectangle {
+public abstract class Cell extends Rectangle {
   static int size = 35;
   char col;
   int row;
@@ -14,11 +14,13 @@ public class Cell extends Rectangle {
     row = inRow;
   }
 
+  public abstract Color getColor();
+  public abstract String getInfo();
+
   public void paint(Graphics g, Point mousePos) {
-    if(contains(mousePos)) {
-      g.setColor(Color.GRAY);
-    } else {
-      g.setColor(Color.WHITE);
+    g.setColor(getColor());
+    if (contains(mousePos)) {
+      g.setColor(g.getColor().darker());
     }
     g.fillRect(x, y, size, size);
     g.setColor(Color.BLACK);
