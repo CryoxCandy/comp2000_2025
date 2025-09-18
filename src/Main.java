@@ -1,5 +1,7 @@
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -12,20 +14,39 @@ public class Main extends JFrame {
 
     class Canvas extends JPanel {
       Stage stage = new Stage();
+      Player player;
 
       public Canvas() {
         setPreferredSize(new Dimension(1024, 720));
-        new Thread(() -> {
-          while (true) {
-            try {
-              Thread.sleep(2000); // Move actors every 2 seconds
-              stage.moveActors();
+        player = (Player) stage.actors.stream().filter(a -> a instanceof Player).findFirst().orElse(null);
+
+        System.out.println("Player initialized: " + (player != null)); // Debug output
+
+        addKeyListener(new KeyAdapter() {
+          @Override
+          public void keyPressed(KeyEvent e) {
+            System.out.println("Key pressed: " + e.getKeyCode()); // Debug output
+            if (player != null) {
+              switch (e.getKeyCode()) {
+                case KeyEvent.VK_UP:
+                  player.move(Direction.UP, stage.grid, stage.actors);
+                  break;
+                case KeyEvent.VK_DOWN:
+                  player.move(Direction.DOWN, stage.grid, stage.actors);
+                  break;
+                case KeyEvent.VK_LEFT:
+                  player.move(Direction.LEFT, stage.grid, stage.actors);
+                  break;
+                case KeyEvent.VK_RIGHT:
+                  player.move(Direction.RIGHT, stage.grid, stage.actors);
+                  break;
+              }
               repaint();
-            } catch (InterruptedException e) {
-              e.printStackTrace();
             }
           }
-        }).start();
+        });
+        setFocusable(true);
+        requestFocusInWindow(); // Ensure Canvas has focus
       }
 
       @Override
