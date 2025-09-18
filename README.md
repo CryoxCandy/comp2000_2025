@@ -1,8 +1,27 @@
-# Welcome to COMP2000 - Object Oriented Programming Practices
+# COMP2000 Assignment 1
 ## Session 2, 2025
+46469087
 
-Please ensure that you follow the weekly updates in this repository
+### Cell Types
 
-You are free to clone this repository into your own hosted git environment, such as Github, Bitbucket, or Gitlab.
+Created a variety of cell types - water, grass, and sand with unique properties from each other.
 
-*However*, please be aware that any repository containing your assignment code **must** be made private. Any repository with assignment code that is public available, or found to be shared with other students, will be considered a violation of the academic integrity policy.
+1. Inheritance
+Main class contains all common behaviour and traits of cells. From this, created subclasses GrassCell, WaterCell, and SandCell.
+
+Each subclass adds its own properties, like wind strength, depth, or temperature, and gives its own version of getInfo.
+
+This avoids repeating code and makes it easy to add new types of cells later.
+
+2. Interfaces
+GetInfo method in the Cell class forces every subclass to explain its unique information.
+
+This means other parts of the program, like the Grid or Stage, can work with any kind of Cell without needing to know the details.
+
+4. Overall Design
+
+Encapsulation: Each cell keeps track of its own data and behavior.
+
+Polymorphism: Methods like paint and getInfo behave differently depending on the cell type.
+
+Extensibility: It’s easy to add new cell types, like a MountainCell, without changing existing code. Which I just might do.
