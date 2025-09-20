@@ -1,6 +1,8 @@
 import java.awt.Color;
 import java.awt.Polygon;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Dog extends Actor {
   public Dog(Cell inLoc) {
@@ -23,5 +25,20 @@ public class Dog extends Actor {
     display.add(face);
     display.add(ear1);
     display.add(ear2);
+  }
+
+  @Override
+  public void moveRandomly(Grid grid) {
+    List<Cell> neighbors = grid.getNeighbors(loc);
+    neighbors.removeIf(cell -> cell instanceof GrassCell); // Remove GrassCell from possible moves
+
+    if (!neighbors.isEmpty()) {
+      Random random = new Random();
+      Cell newLoc = neighbors.get(random.nextInt(neighbors.size()));
+      int deltaX = newLoc.x - loc.x;
+      int deltaY = newLoc.y - loc.y;
+      loc = newLoc;
+      updateDisplay(deltaX, deltaY);
+    }
   }
 }
