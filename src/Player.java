@@ -26,8 +26,8 @@ public class Player extends Actor {
     display.add(head);
   }
 
-  public void move(Direction direction, Grid grid, List<Actor> actors) {
-    System.out.println("Move method called with direction: " + direction); // Debug output
+  public void move(Direction direction, Grid grid, List<Actor> actors, List<Item> items, Stage stage) {
+    System.out.println("Move method called with direction: " + direction); // Debug output to confirm method call
 
     final int targetCol;
     final int targetRow;
@@ -59,14 +59,28 @@ public class Player extends Actor {
       .filter(cell -> cell.col == targetCol && cell.row == targetRow)
       .findFirst();
 
-    System.out.println("Target cell present: " + newLoc.isPresent()); // Debug output
+    System.out.println("Target cell present: " + newLoc.isPresent()); // Debug output to check if cell exists
 
     newLoc.ifPresent(cell -> {
       int deltaX = cell.x - loc.x;
       int deltaY = cell.y - loc.y;
       loc = cell;
       updateDisplay(deltaX, deltaY);
-      System.out.println("Player moved to: " + cell.col + cell.row); // Debug output
+      System.out.println("Player moved to: " + cell.col + cell.row); // Debug output after move
+
+      // Check for item pickup
+      items.removeIf(item -> {
+        if (item.getLocation().equals(cell)) {
+          System.out.println("Picked up item at: " + cell.col + cell.row); // Debug output for item pickup
+          item.setRemoved(true); // Mark the item as removed
+          stage.updateActorVisibility(); // Update actor visibility
+          return true; // Remove the item
+        }
+        return false;
+      });
+
+      // Check proximity to other actors
+      stage.checkActorProximityToPlayer(this);
 
       // Move other actors
       for (Actor actor : actors) {
@@ -75,5 +89,9 @@ public class Player extends Actor {
         }
       }
     });
+  }
+
+  public Cell getLocation() {
+    return loc;
   }
 }

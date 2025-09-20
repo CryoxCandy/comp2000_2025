@@ -1,10 +1,13 @@
 import java.awt.Color;
 import java.awt.Polygon;
+import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 public class Cat extends Actor {
+  private boolean visible = true;
+  private boolean fishCollected = false;
   public Cat(Cell inLoc) {
     loc = inLoc;
     color = Color.MAGENTA;
@@ -38,6 +41,28 @@ public class Cat extends Actor {
       int deltaY = newLoc.y - loc.y;
       loc = newLoc;
       updateDisplay(deltaX, deltaY);
+    }
+  }
+
+  @Override
+  public void paint(Graphics g) {
+    if (!visible) {
+      return; // Do not draw if not visible
+    }
+    super.paint(g);
+  }
+  public void checkFishStatus(Item fish) {
+    if (fish.isRemoved()) {
+      fishCollected = true; // Hide the cat if the fish is removed
+    }
+  }
+
+  public void checkProximityToPlayer(Player player) {
+    int distanceX = Math.abs(loc.x - player.getLocation().x);
+    int distanceY = Math.abs(loc.y - player.getLocation().y);
+
+    if (distanceX <= Cell.size && distanceY <= Cell.size && fishCollected) {
+      visible = false; // Hide the cat if near the player
     }
   }
 }

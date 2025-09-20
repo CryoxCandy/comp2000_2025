@@ -32,7 +32,6 @@ public abstract class Actor {
 
   public void updateDisplay() {
     display.clear();
-    // Example: Update polygons based on the new location
     Polygon body = new Polygon();
     body.addPoint(loc.x + 10, loc.y + 10);
     body.addPoint(loc.x + 25, loc.y + 10);
@@ -46,4 +45,5 @@ public abstract class Actor {
       p.translate(deltaX, deltaY);
     }
   }
+  
 }

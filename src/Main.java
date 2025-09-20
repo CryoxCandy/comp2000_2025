@@ -20,25 +20,25 @@ public class Main extends JFrame {
         setPreferredSize(new Dimension(1024, 720));
         player = (Player) stage.actors.stream().filter(a -> a instanceof Player).findFirst().orElse(null);
 
-        System.out.println("Player initialized: " + (player != null)); // Debug output
+        System.out.println("Player initialized: " + (player != null)); // Debug output to ensure player is found
 
         addKeyListener(new KeyAdapter() {
           @Override
           public void keyPressed(KeyEvent e) {
-            System.out.println("Key pressed: " + e.getKeyCode()); // Debug output
+            System.out.println("Key pressed: " + e.getKeyCode()); // Debug output to signify which key was pressed
             if (player != null) {
               switch (e.getKeyCode()) {
                 case KeyEvent.VK_UP:
-                  player.move(Direction.UP, stage.grid, stage.actors);
+                  player.move(Direction.UP, stage.grid, stage.actors, stage.items, stage);
                   break;
                 case KeyEvent.VK_DOWN:
-                  player.move(Direction.DOWN, stage.grid, stage.actors);
+                  player.move(Direction.DOWN, stage.grid, stage.actors, stage.items, stage);
                   break;
                 case KeyEvent.VK_LEFT:
-                  player.move(Direction.LEFT, stage.grid, stage.actors);
+                  player.move(Direction.LEFT, stage.grid, stage.actors, stage.items, stage);
                   break;
                 case KeyEvent.VK_RIGHT:
-                  player.move(Direction.RIGHT, stage.grid, stage.actors);
+                  player.move(Direction.RIGHT, stage.grid, stage.actors, stage.items, stage);
                   break;
               }
               repaint();
@@ -46,7 +46,7 @@ public class Main extends JFrame {
           }
         });
         setFocusable(true);
-        requestFocusInWindow(); // Ensure Canvas has focus
+        requestFocusInWindow(); // Ensure Canvas has focus so key events are captured
       }
 
       @Override
