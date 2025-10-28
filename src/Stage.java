@@ -4,15 +4,14 @@ import java.awt.Point;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-
 public class Stage {
   Grid grid;
   List<Actor> listOfPlayers;
   List<Cell> cellOverlay;
   Optional<Actor> playerInAction;
-
   GameState currentState;
   Beat beat;
+  WeatherSystem weatherSystem;
 
   public Stage() {
     grid = new Grid();
@@ -21,37 +20,36 @@ public class Stage {
     playerInAction = Optional.empty();
     currentState = new ChoosingActor();
     beat = new AnimationBeat();
+    weatherSystem = new WeatherSystem();
+    weatherSystem.start(); // Start receiving weather
   }
-
   public void addPlayer(Actor player) {
     listOfPlayers.add(player);
     if(player.isBot()) {
       beat.punchIn(player);
     }
   }
-
   public void paint(Graphics g, Point mouseLoc) {
-    // do we have bot moves to make?
+    // Check bot moves
     currentState.paint(g, this);
     grid.paint(g, mouseLoc);
     // Blue cell selection overlay with 50% transparency
     grid.paintOverlay(g, cellOverlay, new Color(0f, 0f, 1f, 0.5f));
-
     beat.ticktock();
+
+    // Update actor moods based on weather
     for(Actor player: listOfPlayers) {
+      player.updateMoodFromWeather(weatherSystem);
       player.paint(g);
     }
+
     draw_sidepanel(g, mouseLoc);
   }
-
   private void draw_sidepanel(Graphics g, Point mouseLoc) {
-    // lots of magic numbers here
-    // they are used to calculate the coordinates of where to draw on the information panel
     final int hTab = 10;
     final int blockVT = 35;
     final int margin = 21*blockVT;
     int yLoc = 20;
-
     // state display
     g.setColor(Color.DARK_GRAY);
     g.drawString(currentState.toString(), margin, yLoc);
@@ -62,6 +60,17 @@ public class Stage {
       g.setColor(Color.DARK_GRAY);
       String coord = String.valueOf(hoverCell.col) + String.valueOf(hoverCell.row);
       g.drawString(coord, margin, yLoc);
+      
+      // Show weather at this cell
+      Optional<WeatherData> weather = weatherSystem.getWeatherAt((int)(hoverCell.col - 'A'), hoverCell.row);
+      if (weather.isPresent()) {
+        yLoc += 15;
+        g.setColor(Color.BLUE);
+        g.drawString(String.format("Rain: %.2f", weather.get().getRainfall()), margin, yLoc);
+        yLoc += 15;
+        g.setColor(Color.RED);
+        g.drawString(String.format("Temp: %.2f", weather.get().getTemperature()), margin, yLoc);
+      }
     }
 
     // agent display
@@ -81,7 +90,18 @@ public class Stage {
         g.drawString("mover:", labelIndent, yLoc+3*vTab);
         g.drawString(a.mover.getClass().getName(), valueIndent, yLoc+3*vTab);
       }
-    }    
+    }
+
+    //Weather statistics
+    yLoc += 3*blockVT;
+    g.setColor(Color.DARK_GRAY);
+    g.drawString("Weather System:", margin, yLoc);
+    yLoc += vTab;
+    g.drawString(weatherSystem.isRunning() ? "Connected" : "Disconnected", margin + hTab, yLoc);
+    yLoc += vTab;
+    g.drawString(String.format("Avg Rain: %.2f", weatherSystem.getAverageRainfall()), margin + hTab, yLoc);
+    yLoc += vTab;
+    g.drawString(String.format("Avg Temp: %.2f", weatherSystem.getAverageTemperature()), margin + hTab, yLoc);
   }
 
   public List<Cell> getClearRadius(Cell from, int size) {
@@ -91,8 +111,10 @@ public class Stage {
     }
     return init;
   }
-
   public void mouseClicked(int x, int y) {
     currentState.mouseClick(x, y, this);
+  }
+  public WeatherSystem getWeatherSystem() {
+    return weatherSystem;
   }
 }

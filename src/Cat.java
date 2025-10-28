@@ -1,14 +1,11 @@
 import java.awt.Color;
 import java.awt.Polygon;
 import java.util.ArrayList;
-
 public class Cat extends Actor {
   public static final int catMoves = 2;
-
   public Cat(Cell inLoc, boolean isBot) {
-    super(inLoc, Color.BLUE, isBot, catMoves);
+    super(inLoc, Color.BLUE, isBot, catMoves, new LikesWarmWeather());
   }
-
   protected void setPoly() {
     display = new ArrayList<Polygon>();
     Polygon ear1 = new Polygon();

@@ -1,14 +1,11 @@
 import java.awt.Color;
 import java.awt.Polygon;
 import java.util.ArrayList;
-
 public class Bird extends Actor {
   public static final int birbMoves = 3;
-
   public Bird(Cell inLoc, boolean isBot) {
-    super(inLoc, Color.GREEN, isBot, birbMoves);
+    super(inLoc, Color.GREEN, isBot, birbMoves, new LikesDryWeather());
   }
-
   protected void setPoly() {
     display = new ArrayList<Polygon>();
     Polygon wing1 = new Polygon();
